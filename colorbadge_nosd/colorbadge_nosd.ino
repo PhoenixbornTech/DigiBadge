@@ -150,7 +150,7 @@ void drawRed() {
 }
 void drawMyNameIs(){
   tft.fillScreen(ST7735_YELLOW);
-  drawtext(badgename);
+  drawtext(badgename, ST7735_BLACK, 28, 85, 3, true);
 }
 
 void drawtext(char *text, uint16_t color, int x, int y, int tsize, boolean wrap) {
