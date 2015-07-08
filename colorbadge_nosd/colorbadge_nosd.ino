@@ -1,7 +1,15 @@
+//Andon's Color Badge basic program.
+//Utilizes the ST7735 driver from Adafruit and the Adafruit Graphics Library
+//Documentation can be found here: https://learn.adafruit.com/adafruit-gfx-graphics-library/graphics-primitives
+//Due to size constraints (And my own coding abilities), no SD card interactions are programmed in.
+//However, the standard SD card library can be used. I've added the SD card chip select pin below for reference.
+
+
 #include <Adafruit_GFX.h>    // Core graphics library
 #include <Adafruit_ST7735.h> // Hardware-specific library
 #include <SPI.h>
 
+//#define SD_CS   10  // SD card Chip Select line  
 #define TFT_CS    9  // Chip select line for TFT display
 #define TFT_RST   8  // Reset line for TFT
 #define TFT_DC    7  // Data/command line for TFT
@@ -15,24 +23,34 @@ int bright = 10; // Ten steps of brightness. Default to 10.
 int badge = 2;   // Badge 1 is Green
                  // Badge 2 is Yellow. Start here.
                  // Badge 3 is Red.
+                 // Badge 4 is "My name is..."
 int button1state = 0; // For reading Button 1
 int button2state = 0; // For reading Button 2
+char* badgename = "Andon";
 
 void setup(void) {
   pinMode(TFT_DIM, OUTPUT);
   pinMode(BUTTON1, INPUT);
   pinMode(BUTTON2, INPUT);
   tft.initR(INITR_BLACKTAB);
-  tft.setRotation(3);
+  tft.setRotation(1);
   //Rotation 0: Pins are DOWN.
   //Rotation 1: Pins are RIGHT.
   //Rotation 2: Pins are UP.
   //Rotation 3: Pins are LEFT.
-  //Default design rotation is 3.
+  //Default design rotation is 1.
   setLight(bright);
   tft.fillScreen(ST7735_BLACK);
-  drawtext("Digibadge Starting...", ST7735_WHITE, 0, 0);
-  delay(1000);
+  drawtext("Digibadge Starting...", ST7735_WHITE, 0, 0, 1, true);
+  delay(500);
+  drawtext("Created in 2015 by", ST7735_WHITE, 0, 16, 1, true);
+  drawtext("Jason LeClare.", ST7735_WHITE, 0, 24, 1, true);
+  drawtext("http://www.matchfire.net", ST7735_WHITE, 0, 32, 1, true);
+  drawtext("Source available at:", ST7735_WHITE, 0, 48, 1, true);
+  drawtext("http://bit.ly/1HeVcMC", ST7735_WHITE, 0, 56, 1, true);
+  drawtext("For color badge info:", ST7735_WHITE, 0, 72, 1, true);
+  drawtext("http://bitly.com/1jY0tzO", ST7735_WHITE, 0, 80, 1, true);
+  delay(2500);
   drawBadge(badge);
 }
 void loop() {
@@ -44,7 +62,7 @@ void loop() {
     // Button 1 was pressed. We want the next badge.
     badge += 1;
     if (badge > 3) {
-      // Don't let the number get too high. Only 3 badges.
+      // Don't let the number get too high. Only 3 badges
       badge = 1;
     }
     delay(500); // Don't cycle rapidly through them.
@@ -58,9 +76,7 @@ void loop() {
       bright = 1;
     }
     setLight(bright);
-    char brt[1];
-    brt[0] = char(47+bright);
-    drawtext(brt, ST7735_BLACK, 1, 1);
+    drawnum(bright, ST7735_BLACK, 1, 1, 1, true);
     delay(500); // Don't cycle rapidly through brightness levels.
     drawBadge(badge);    
   }
@@ -98,39 +114,36 @@ void drawBadge(int b) {
 void drawGreen() {
   //
   tft.fillScreen(ST7735_GREEN);
-  if (tft.getRotation() == 0 || tft.getRotation() == 2){
-    tft.fillCircle(64, 80, 42, ST7735_WHITE);
-    tft.fillCircle(64, 80, 34, ST7735_GREEN);
-  }
-  else {
-    tft.fillCircle(80, 64, 42, ST7735_WHITE);
-    tft.fillCircle(80, 64, 34, ST7735_GREEN);
-  }
+  tft.fillCircle(80, 45, 27, ST7735_BLACK);
+  tft.fillCircle(80, 45, 24, ST7735_WHITE);
+  drawtext("GREEN", ST7735_BLACK, 36, 85, 3, true);
 }
 void drawYellow() {
   tft.fillScreen(ST7735_YELLOW);
-  if (tft.getRotation() == 0 || tft.getRotation() == 2){
-    tft.fillRect(22, 68, 84, 16, ST7735_WHITE);
-  }
-  else {
-    tft.fillRect(22, 56, 116, 16, ST7735_WHITE);
-  }
+  tft.fillRect(22, 26, 116, 25, ST7735_BLACK);
+  tft.fillRect(25, 29, 110, 19, ST7735_WHITE);
+  drawtext("YELLOW", ST7735_BLACK, 28, 85, 3, true);
 }
 void drawRed() {
   tft.fillScreen(ST7735_RED);
-  if (tft.getRotation() == 0 || tft.getRotation() == 2){
-    tft.fillRect(22, 38, 84, 84, ST7735_WHITE);
-    tft.fillRect(30, 46, 68, 68, ST7735_RED);
-  }
-  else {
-    tft.fillRect(38, 22, 84, 84, ST7735_WHITE);
-    tft.fillRect(46, 30, 68, 68, ST7735_RED);
-  }
+  tft.fillRect(53, 18, 54, 54, ST7735_BLACK);
+  tft.fillRect(56, 21, 48, 48, ST7735_WHITE);
+  drawtext("RED", ST7735_BLACK, 54, 85, 3, true);
 }
 
-void drawtext(char *text, uint16_t color, int x, int y) {
+void drawtext(char *text, uint16_t color, int x, int y, int tsize, boolean wrap) {
+  settext(color, tsize, x, y, wrap);
+  tft.print(text);
+}
+
+void drawnum(int text, uint16_t color, int x, int y, int tsize, boolean wrap) {
+  settext(color, tsize, x, y, wrap);
+  tft.print(text);
+}
+
+void settext(uint16_t color, int tsize, int x, int y, boolean wrap) {
   tft.setCursor(x, y);
   tft.setTextColor(color);
-  tft.setTextWrap(true);
-  tft.print(text);
+  tft.setTextWrap(wrap);
+  tft.setTextSize(tsize);
 }
