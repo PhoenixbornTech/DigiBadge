@@ -30,8 +30,8 @@ char* badgename = "Andon";
 
 void setup(void) {
   pinMode(TFT_DIM, OUTPUT);
-  pinMode(BUTTON1, INPUT);
-  pinMode(BUTTON2, INPUT);
+  pinMode(BUTTON1, INPUT_PULLUP);
+  pinMode(BUTTON2, INPUT_PULLUP);
   tft.initR(INITR_BLACKTAB);
   tft.setRotation(1);
   //Rotation 0: Pins are DOWN.
@@ -58,7 +58,7 @@ void loop() {
   button1state = digitalRead(BUTTON1);
   button2state = digitalRead(BUTTON2);
   // Now that we've read our buttons, see if we need to change anything.
-  if (button1state == HIGH) {
+  if (button1state == LOW) {
     // Button 1 was pressed. We want the next badge.
     badge += 1;
     if (badge > 3) {
@@ -68,7 +68,7 @@ void loop() {
     delay(500); // Don't cycle rapidly through them.
     drawBadge(badge);
   }
-  if (button2state == HIGH) {
+  if (button2state == LOW) {
     // Button 2 was pressed. We want the next brightness value.
     bright += 1;
     if (bright > 10) {
