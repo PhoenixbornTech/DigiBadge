@@ -23,7 +23,6 @@ int bright = 10; // Ten steps of brightness. Default to 10.
 int badge = 2;   // Badge 1 is Green
                  // Badge 2 is Yellow. Start here.
                  // Badge 3 is Red.
-                 // Badge 4 is "My name is..."
 int button1state = 0; // For reading Button 1
 int button2state = 0; // For reading Button 2
 char* badgename = "Andon";
