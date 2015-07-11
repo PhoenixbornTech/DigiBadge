@@ -25,7 +25,14 @@ int badge = 2;   // Badge 1 is Green
                  // Badge 3 is Red.
 int button1state = 0; // For reading Button 1
 int button2state = 0; // For reading Button 2
+
+// Mod by FrankkieNL:
+// There is no way for the user to enter a name, 
+// So Badge 4 should only be used for the Hacker-version,
+// Where the user enters his name in this file.
+// Set here if this version is a Hacker-version to enable badge 4
 char* badgename = "Andon";
+int isHacker = 1; //1 = true; 0 = false;
 
 void setup(void) {
   pinMode(TFT_DIM, OUTPUT);
@@ -60,9 +67,17 @@ void loop() {
   if (button1state == LOW) {
     // Button 1 was pressed. We want the next badge.
     badge += 1;
-    if (badge > 3) {
-      // Don't let the number get too high. Only 3 badges
-      badge = 1;
+    if (isHacker == 1){
+      //Enable 'My name is ...' in Hacker-version
+      if (badge > 4) {
+        // Don't let the number get too high. There are 4 badges in hacker version
+        badge = 1;
+      }
+    } else {
+      if (badge > 3) {
+        // Don't let the number get too high. Only 3 badges in non-hacker version
+        badge = 1;
+      }
     }
     delay(500); // Don't cycle rapidly through them.
     drawBadge(badge);
@@ -102,6 +117,9 @@ void drawBadge(int b) {
     // Badge number 3 is Red - "Don't bother me."
     drawRed();
   }
+  else if (b == 4) {
+    drawMyNameIs();
+  }
   else {
     // Default to Red if something gets added up wrong.
     drawRed();
@@ -128,6 +146,10 @@ void drawRed() {
   tft.fillRect(53, 18, 54, 54, ST7735_BLACK);
   tft.fillRect(56, 21, 48, 48, ST7735_WHITE);
   drawtext("RED", ST7735_BLACK, 54, 85, 3, true);
+}
+void drawMyNameIs(){
+  tft.fillScreen(ST7735_YELLOW);
+  drawtext(badgename, ST7735_BLACK, 28, 85, 3, true);
 }
 
 void drawtext(char *text, uint16_t color, int x, int y, int tsize, boolean wrap) {
