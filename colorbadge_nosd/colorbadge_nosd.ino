@@ -25,7 +25,6 @@ int badge = 2;   // Badge 1 is Green
                  // Badge 3 is Red.
 int button1state = 0; // For reading Button 1
 int button2state = 0; // For reading Button 2
-char* badgename = "Andon";
 
 void setup(void) {
   pinMode(TFT_DIM, OUTPUT);
