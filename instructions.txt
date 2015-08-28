@@ -1,0 +1,31 @@
+Soldering Instructions for Hacker Version
+
+I highly recommend soldering the voltage regulator first. For this, you'll need a pair of tweezers and a little bit of patience. Solder Wick is highly recommended as well - Makes things a LOT easier.
+
+First, put a dab of solder on one of the solder pads - My choice is the pad right beneath the "1" in the "U1" designation. Carefully remove the voltage regulator from the black packaging and orient it properly next to the pads. It'll only sit properly in one manner (One of the reasons I chose this particular one), so you don't have to worry about finding Pin 1 on the pad and on the regulator.
+
+Heat up the dab you made earlier and, using the tweezers, slid the regulator into the pad. Make sure it's lined up and, while holding it in place with the tweezers, remove the soldering iron. If the regulator gets turned or oriented incorrectly, simply re-heat the solder and move the regulator to where it should be. Once it is in position, you can dab a tiny bit of solder onto each of the other legs and pads. The three pads tend to bridge themselves - This is where the solder wick comes in really handy. It'll remove almost all of the solder, removing any bridges that may have formed, but there'll still be plenty of solder on the pads to hold the chip on and make a good connection.
+
+The rest of the pieces are simply place the pins in and solder normally. 
+
+Some tips and tricks to keep in mind:
+There are three capacitors which look very similar. Two of them, the polarity matters. The other one, it does not. The silkscreen is marked with the direction of the polarity.
+C1 (Next to the power switch) is the 10uF capacitor. On this one, polarity matters - the grey stripe should be facing towards the battery and to the "outside" of the chip.
+C2 (Far side of board) is the 47uF capacitor. On this one as well, the polarity matters - The grey stripe should be facing in towards the FTDI header.
+C3 (Next to C1) is a 0.1uF capacitor. Polarity on this one doesn't matter.
+
+The diode, being a diode, requires being socketed in the correct direction. There is a red tab on one lead, which connects to the end of the diode with the line. This should be aligned with the end of the diode that has the line on the silkscreen. Additionally, the diode's leads can be a bit more difficult to solder because they're a little harder to heat.
+
+Capacitors C1 and C3 can be a little tight with the power switch. I recommend soldering in the power switch first.
+
+The socket for the ATMega 328 has a slight notch in one end - There's an arc indicated on the silkscreen. These should line up - As well as the arc/notch in the ATMega 328 chip itself.
+
+The FTDI header pins can be difficult to keep in if done after the battery connectors or capacitors. I recommend doing this prior to soldering in the battery connectors or capacitors.
+
+The buttons only go in one way - Their legs are on opposite sides. They should snap in with little fuss - Watch any fingers you have on the rear of the board though! The legs can be sharp.
+
+To make sure the female headers line up to your display board, I recommend sliding them onto the display board's male headers, putting the display board face down, and then putting the digibadge board on top of this. Take care to make sure the headers are on the correct side! They should be on the same side as the voltage regulator.
+
+The battery pins can take a little force to pop in, but much like the buttons, they can be pointy towards fingers. They also take a while to heat up and will take a larger amount of solder to get soldered in nicely. 
+
+If, after assembly, the DigiBadge does not boot up - I may have forgotten to program the ATMega 328 chip. Plugging in the chip, via an FTDI connector, and attempting to upload the DigiBadge code will remedy this. For the Hacker version, the badge should be programmed via the "Arduino Pro or Pro Mini" board setting, with the "3.3v (8MHz)" processor setting. The COM port will vary by computers.
